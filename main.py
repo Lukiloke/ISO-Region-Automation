@@ -6,10 +6,7 @@ from geopy.exc import GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceErro
 import sys
 
 def try_pgeocode(country_code, postal_code, pgeocode_cache, current_line):
-    """
-    Tente de trouver le code ISO en utilisant pgeocode.
-    Modifie current_line directement.
-    """
+
     print(" Attempting with pgeocode...")
     
     if country_code not in pgeocode_cache:
