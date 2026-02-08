@@ -6,8 +6,9 @@ This is a Python script that automatically finds the ISO3166 (or ISO Region Code
 
 1. Clone this repo to your computer.
 2. Prepare a .csv file with your data, as shown in `example.csv` and in the image below.
-3. Run the Python program and specify the path (or name, if in the same folder) to your input and output files.
-4. Let the program run. Because the APIs used require a minimum delay between each request, I added a 1.1 second delay for every line. Therefore, the program can take some time to process large files.
+3. Run the `main.py` file and specify the path (or name, if in the same folder) to your input and output files.
+4. Let the program run until it finished.
+
 
 ![Alt Text](image.png "Example Image")
 
@@ -33,5 +34,6 @@ If you use **ANY** code from this project:
 
 # DISCLAIMER
 
+Because the APIs used require a minimum delay between each request, I added a 1.1 second delay for every line. Therefore, the program can take some time to process large files.
 This project uses free APIs that are not 100% accurate, so it's possible that some of the results provided are incorrect or that some ISO3166 codes are not found.
 If you're looking for highly accurate results, I recommend paying for APIs such as the Google Maps API.
