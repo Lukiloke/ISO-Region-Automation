@@ -6,13 +6,16 @@ from geopy.exc import GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceErro
 import sys
 
 def try_pgeocode(country_code, postal_code, pgeocode_cache, current_line):
-
-    print(" Attempting with pgeocode...")
+    """
+    Tente de trouver le code ISO en utilisant pgeocode.
+    Modifie current_line directement.
+    """
+    print("> Attempting with pgeocode...")
     
     if country_code not in pgeocode_cache:
         try:
             pgeocode_cache[country_code] = pgeocode.Nominatim(country_code)
-        except ValueError: 
+        except ValueError:
             pgeocode_cache[country_code] = None
     
     nomi = pgeocode_cache[country_code]
@@ -22,7 +25,7 @@ def try_pgeocode(country_code, postal_code, pgeocode_cache, current_line):
         iso_code_short = getattr(resultat, 'state_code', 'nan')
         iso_code_short = str(iso_code_short)
 
-        if iso_code_short == 'nan' or not iso_code_short:
+        if iso_code_short.lower() in ['nan', 'none', ''] or not iso_code_short:
             current_line.append("No Data")
             print("✖️ No data in pgeocode")
         else:
@@ -63,9 +66,10 @@ for i in range(start_index, end_line_index):
     try:
         if len(current_line) >= 2:
             country_code = current_line[0].strip().upper()
-            postal_code = str("0" + current_line[1].strip())
+            postal_code = current_line[1].strip()
+           
             if country_code == 'US' and len(postal_code) > 5:
-                postal_code = postal_code[:5] 
+                postal_code = postal_code[:5]
             iso_code = None 
 
             print(f"\nLine {i}: Searching in Nominatim for: {postal_code}, {country_code}")
@@ -93,11 +97,11 @@ for i in range(start_index, end_line_index):
 
                 else:
                     print("No ISO data returned by Nominatim, falling back to pgeocode...")
-                    try_pgeocode(country_code, postal_code, pgeocode_cache, current_line)
-            
+                    try_pgeocode(country_code, postal_code, pgeocode_cache, current_line) 
             else:
                 print("X - Postal Code Not Found by Nominatim, falling back to pgeocode...")
                 try_pgeocode(country_code, postal_code, pgeocode_cache, current_line) 
+        
         else:
             print(f"Line {i}: Less than two colons, skipped")
 
@@ -118,7 +122,7 @@ try:
         writer.writerows(content_lists)
     print("\n\n---------------- CSV file updated with succes! -------------")
 except Exception as e:
-    print(f"\n Error during file write : {e}")
+    print(f"\nX Error during file write : {e}")
 
 
 input('')
